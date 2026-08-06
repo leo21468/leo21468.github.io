@@ -217,7 +217,9 @@ h2::before {
   gap: 18px;
 }
 
-.projects a {
+.projects a,
+.projects strong {
+  color: var(--ink);
   font-weight: 700;
 }
 
