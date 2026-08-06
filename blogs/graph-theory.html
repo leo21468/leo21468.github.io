@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="跟着karl学算法：图论篇 - Yan Liang's algorithm notes" />
+    <title>跟着karl学算法：图论篇 | Yan Liang</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <main class="page blog-page">
+      <nav class="topbar" aria-label="Blog navigation">
+        <a href="../index.html">Home</a>
+        <a href="index.html">Blogs</a>
+      </nav>
+      <article class="article">
+        <header class="article-header">
+          <p class="article-meta">Algorithm Notes &middot; 图论篇 &middot; 2026-08-06</p>
+          <h1>跟着karl学算法：图论篇</h1>
+          <p class="article-subtitle">Graph traversal, connectivity, minimum spanning trees, and shortest paths.</p>
+        </header>
+        <div class="article-shell">
+          <aside class="toc" aria-label="Table of contents">
+            <p class="toc-title">目录</p>
+          <a href="#graph-1">第1章 图的基本概念</a>
+          <a href="#graph-2">第2章 DFS和BFS</a>
+          <a href="#graph-3">第3章 并查集</a>
+          <a href="#graph-4">第4章 最小生成树</a>
+          <a href="#graph-5">第5章 最短路径算法</a>
+          </aside>
+          <div class="article-body">
+<h2 id="graph-1">第1章 图的基本概念</h2>
+<p>连通图相对于无向图来说，指的是图中任意两个顶点之间都存在路径的图。对于有向图来说，强连通图指的是图中任意两个顶点之间都存在路径的图，而弱连通图指的是将有向图中的所有边视为无向边后得到的无向图是连通的。</p>
+<h2 id="graph-2">第2章 DFS和BFS</h2>
+<p>图的存储一般分为邻接矩阵和邻接表两种方式。邻接矩阵适合稠密图，空间复杂度为O(n^2)，而邻接表适合稀疏图，空间复杂度为O(n + m)，其中n是顶点数，m是边数。<br />
+使用DFS最后输出结果时，我们可以采用C++的新特性，直接使用范围for循环来输出路线结果：</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="at">const</span> vector<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;</span> <span class="op">&amp;</span>path <span class="op">:</span> result<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> vertex <span class="op">:</span> path<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        cout <span class="op">&lt;&lt;</span> vertex <span class="op">&lt;&lt;</span> <span class="st">&quot; &quot;</span><span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    cout <span class="op">&lt;&lt;</span> endl<span class="op">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>BFS可以使用任意容器，但通常使用队列来实现。</p>
+<p>例题：字符串迁移 本题需要求出从字符串start到字符串end的最短迁移路径，要求每次迁移只能改变一个字符，并且迁移后的字符串必须在字典中出现过。 思路：我们可以将每个字符串看作图中的一个节点，如果两个字符串之间只有一个字符不同，那么它们之间就有一条边。我们需要使用BFS来寻找从start到end的最短路径。 使用BFS能保证我们找到的路径是最短的，因为BFS是逐层扩展的，先访问距离起点较近的节点，再访问距离较远的节点。同时可以使用双向BFS来优化搜索效率，从start和end同时开始搜索，直到两边的搜索相遇，这样可以大大减少搜索的节点数量，提高效率。</p>
+<h2 id="graph-3">第3章 并查集</h2>
+<p>使用路径压缩和按秩合并可以优化并查集的性能，使得每次操作的时间复杂度接近O(1)。路径压缩是在find操作中，将访问过的节点直接连接到根节点上，减少树的高度；按秩合并是在union操作中，将较小的树连接到较大的树上，保持树的平衡。</p>
+<p>需要注意的是在join的时候，一定要通过find函数找到根节点来进行合并，而不是直接将一个节点连接到另一个节点上，否则会导致连通性可能出现问题。 一个具体的例子就是join(1,2),join(3,2)。</p>
+<p>另一种合并方式是按秩合并，按秩合并是根据树的高度来进行合并的，将较矮的树连接到较高的树上，这样可以保持树的平衡，避免出现过高的树导致性能下降。</p>
+<p>例题：寻找存在的路径 给定一个n个节点的图和一个边列表edges，判断是否存在一条路径连接节点source和destination。 思路：我们可以使用并查集来解决这个问题。首先初始化一个并查集，将每个节点看作一个独立的集合。然后遍历边列表，将连接的节点进行合并。最后检查source和destination是否在同一个集合中，如果是，则说明存在路径连接它们。</p>
+<p><strong>例题</strong>：并查集寻找有向边 给定一个边数等于点数的有向图，找出删除哪条边可以使得图变成一个树。 思路：可以将情况分为三种：</p>
+<ol type="1">
+<li>入度为2的节点不存在：图中有环，需要删除环中的任意一条边。</li>
+<li>入度为2的节点存在且环存在：需要删除入度为2的节点的其中一条边，具体删除哪条边需要根据环的情况来判断。</li>
+<li>入度为2的节点存在但环不存在：需要删除入度为2的节点的其中一条边，具体删除哪条边需要根据输入的边列表来判断，通常是删除最后出现的那条边 依然根据拓扑排序来判断图内是否存在环。</li>
+</ol>
+<h2 id="graph-4">第4章 最小生成树</h2>
+<p>有两种常用的算法来求解最小生成树：Prim算法和Kruskal算法。 Prim算法是从一个起始节点开始，逐步扩展生成树，每次选择与生成树相连的边中权重最小的边加入生成树（开一个专门的minDist数组，时间复杂度为O(V^2)），直到所有节点都被包含在生成树中。Prim算法适合稠密图，时间复杂度为O(E log V)，其中E是边数，V是顶点数。由于每个节点都会在最小生成树中，所以起始点的选择不会影响最终的结果。如果要记录边的选择，可以用map来记录每个节点的父节点，变为有向边的形式，最后根据父节点关系来输出边的选择。 Kruskal算法是将所有边按照权重从小到大排序，然后逐步选择边加入生成树，每次选择权重最小的边，如果加入该边不会形成环，则将其加入生成树，直到生成树包含所有节点。Kruskal算法适合稀疏图，时间复杂度为O(E log E)，其中E是边数。Kruskal算法需要使用并查集来判断加入的边是否会形成环。</p>
+<h2 id="graph-5">第5章 最短路径算法</h2>
+<p>有两种常用的算法来求解最短路径：Dijkstra算法和Bellman-Ford算法。 Dijkstra算法适用于边权非负的图，原理也是贪心，同Prim算法类似，每次选择当前距离起点最近的节点进行扩展，更新其邻居节点的距离，直到所有节点都被访问过。时间复杂度为O(E log V)，其中E是边数，V是顶点数。 Bellman-Ford算法适用于边权可以为负的图，原理是动态规划，通过不断松弛边来更新最短路径，重复V-1次，其中V是顶点数。时间复杂度为O(V * E)，其中V是顶点数，E是边数。每一次松弛操作后，Bellman-Ford算法能找到起点到与起点相连n条边的最短路径，但不意味着是当前节点到起点的最短路径。Bellman-Ford算法还可以检测负权环，如果在第V次松弛时仍然能够更新距离，说明存在负权环。每一次松弛操作，我们可以使用一个队列存储更新了的节点，只有当一个节点的距离被更新且当前不在队列中时，才将其加入队列，这样可以避免不必要的松弛操作，提高效率，这个优化版本被称为SPFA算法。若是疏松图，SPFA的复杂度会接近O(E)，但在最坏情况下，SPFA的复杂度仍然是O(V * E)。</p>
+<p>想要用Bellman-Ford寻找负权环，我们可以在第V次松弛时，检查是否还有边能够被松弛，如果有，则说明存在负权环。我们可以使用一个布尔数组来标记哪些节点在第V次松弛时被更新了，如果有任何一个节点被更新了，那么就说明存在负权环。我们也可以等价为入队大于等于V次的节点说明存在负权环。注意需要一个额外的数组记录节点是不是在队列中，避免重复入队。</p>
+<p>SPFA没有所谓的一轮的概念，因为它是基于队列的，每次更新一个节点就会立即检查它的邻居节点是否需要更新，并将需要更新的邻居节点加入队列中。因此，SPFA的迭代过程是动态的，不像Bellman-Ford算法那样有明确的轮次划分。</p>
+<p>例题：有限制的最短路径 给定一个有向图，图中每条边都有一个权重，求从起点到终点的最短路径长度，要求路径上最多只能经过k条边。 注意使用bellman ford的时候松弛k次时，每一次松弛对应的minDist对应的是上一次松弛的结果，因此需要使用一个临时数组来存储当前松弛的结果，避免在同一轮松弛中更新了minDist后又被后续的边松弛所影响。 如果使用SPFA算法，则针对每一轮我们需要记录新弹入的节点数，作为下一轮的起始节点数，直到达到k轮或者没有新的节点被弹入为止。</p>
+<p>多源最短路径问题就要用Floyd-Warshall算法了，时间复杂度为O(V^3)，其中V是顶点数。Floyd-Warshall算法通过动态规划的方式，逐步更新最短路径矩阵，最终得到任意两点之间的最短路径长度。不能将k放在中间层的原因是因为Floyd-Warshall算法的核心思想是通过逐步引入中间节点来更新最短路径，如果将k放在中间层，那么就无法正确地更新最短路径矩阵，因为k的限制会影响到路径的选择，导致无法得到正确的最短路径长度。 dp[i][j][k]表示的是当中间节点仅为{1,...,k}的时候，节点i到节点j的最短路径长度。对于每一轮k，我们需要遍历所有的节点对(i, j)，更新dp[i][j][k]的值，比较不经过节点k的路径长度dp[i][j][k-1]和经过节点k的路径长度dp[i][k][k-1] + dp[k][j][k-1]，取两者中的较小值作为dp[i][j][k]的值。最终我们需要返回dp[source][destination][V]，其中V是图中节点的总数。</p>
+<p>同样我们可以压缩空间，将dp数组压缩为二维数组，dp[i][j]表示当前中间节点集合为{1,...,k}时，节点i到节点j的最短路径长度。每一轮k，我们需要遍历所有的节点对(i, j)，更新dp[i][j]的值，比较不经过节点k的路径长度dp[i][j]和经过节点k的路径长度dp[i][k] + dp[k][j]，取两者中的较小值作为dp[i][j]的新值。最终我们需要返回dp[source][destination]。</p>
+<p>同时作为启发式算法的A<em>算法也可以用来求解最短路径问题，A</em>算法在Dijkstra算法的基础上引入了启发式函数，能够更快地找到目标节点。A<em>算法的时间复杂度取决于启发式函数的质量，最坏情况下可能退化为O(E log V)，其中E是边数，V是顶点数。A</em>算法的核心思想是通过启发式函数来估计从当前节点到目标节点的距离，从而优先探索更有可能接近目标节点的路径。启发式函数需要满足一致性条件，即对于任意两个节点u和v，启发式函数h(u)应该满足h(u) &lt;= h(v) + w(u, v)，其中w(u, v)是从节点u到节点v的边权重。这样可以保证A<em>算法能够找到最短路径，以保证可能的最优情况都会被涉及到。我们可以用曼哈顿距离/欧几里得距离等启发式函数来估计节点之间的距离，具体选择哪种启发式函数取决于问题的特点和实际需求。需要注意的是，使用A</em>算法时边权重必须是非负的，否则可能会导致算法无法正确地找到最短路径。</p>
+          </div>
+        </div>
+      </article>
+      <footer class="footer">
+        <span>&copy; 2026 Yan Liang</span>
+        <a href="index.html">Back to blogs</a>
+      </footer>
+    </main>
+  </body>
+</html>
