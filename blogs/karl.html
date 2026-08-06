@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="跟着karl学算法 - Yan Liang ???????" />
+    <title>跟着karl学算法 | Yan Liang</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <main class="page blog-page">
+      <nav class="topbar" aria-label="Blog navigation">
+        <a href="../index.html">Home</a>
+        <a href="index.html">Blogs</a>
+      </nav>
+      <article class="article">
+        <header class="article-header">
+          <p class="article-meta">Data Structure Notes ? Published 2026-08-06</p>
+          <h1>跟着karl学算法</h1>
+          <p class="article-subtitle">?????????????? Markdown ?????????</p>
+        </header>
+        <aside class="toc" aria-label="Table of contents">
+          <a href="#第4章-链表">第4章 链表</a>
+<a href="#第5章-哈希表">第5章 哈希表</a>
+<a href="#第6章-字符串">第6章 字符串</a>
+<a href="#第7章-栈与队列">第7章 栈与队列</a>
+<a href="#第8章-二叉树">第8章 二叉树</a>
+<a href="#第9章-回溯算法">第9章 回溯算法</a>
+<a href="#第10章-贪心算法">第10章 贪心算法</a>
+<a href="#第11章-动态规划">第11章 动态规划</a>
+<a href="#第1章-图的基本概念">第1章 图的基本概念</a>
+<a href="#第2章-DFS和BFS">第2章 DFS和BFS</a>
+<a href="#第3章-并查集">第3章 并查集</a>
+<a href="#第4章-最小生成树">第4章 最小生成树</a>
+<a href="#第5章-最短路径算法">第5章 最短路径算法</a>
+        </aside>
+        <div class="article-body">
+          <h1 id="跟着karl学算法">跟着karl学算法</h1>
+<h2 id="第4章-链表">第4章 链表</h2>
+<p>链表在C++中的定义方式：</p>
+<pre><code class="language-cpp">struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};</code></pre>
+<p>对于删除链表中的节点，对于C++，需要手动释放内存，避免内存泄漏。以下是删除链表节点的示例代码：</p>
+<pre><code class="language-cpp">ListNode* deleteNode(ListNode* head, int val) {
+    if (!head) return nullptr;
+    if (head-&gt;val == val) {
+        ListNode* temp = head;
+        head = head-&gt;next;
+        delete temp; // 释放内存
+        return head;
+    }
+    ListNode* current = head;
+    while (current-&gt;next &amp;&amp; current-&gt;next-&gt;val != val) {
+        current = current-&gt;next;
+    }
+    if (current-&gt;next) {
+        ListNode* temp = current-&gt;next;
+        current-&gt;next = current-&gt;next-&gt;next;
+        delete temp; // 释放内存
+    }
+    return head;
+}</code></pre>
+<p>对于删除头节点，有两种方式：</p>
+<ol>
+<li>直接修改头指针，返回新的头节点。</li>
+<li>设置虚拟头节点，返回虚拟头节点的下一个节点。</li>
+</ol>
+<p>对于删除倒数第n个节点，可以使用双指针技巧，先让一个指针走n步，然后两个指针同时前进，直到第一个指针到达末尾，此时第二个指针指向的就是要删除的节点。 这种快慢指针的技巧十分常见。</p>
+<p>对于链表找环，可以使用快慢指针法，快指针每次走两步，慢指针每次走一步，如果链表有环，最终快慢指针会相遇。 若要找到环的入口，由于两者步数相差1，所以让一个节点从起点，另一个节点从相遇点出发，每次都走一步，最终会在环的入口相遇。</p>
+<h2 id="第5章-哈希表">第5章 哈希表</h2>
+<p>对于哈希冲突，常用的解决方法有链地址法和开放地址法。 链地址法是为每个哈希表的槽位维护一个链表，所有映射到同一槽位的元素都存储在该链表中。需要注意平衡链表的长度与哈希表的大小。 开放地址法是在发生冲突时，寻找下一个空槽位存储元素。常用的探测方法有线性探测、二次探测和双重哈希。要求哈希表的大小大于元素个数，以减少冲突。</p>
+<p>对于结构的实现，set是一种不允许重复元素的集合，底层通常使用红黑树实现，支持有序遍历。而unordered_set是一种不允许重复元素的集合，底层使用哈希表实现，不保证元素的顺序，但查找、插入和删除操作的平均时间复杂度为O(1)。 相对应的，map是一种键值对集合，底层通常使用红黑树实现，支持有序遍历。而unordered_map是一种键值对集合，底层使用哈希表实现，不保证键值对的顺序，但查找、插入和删除操作的平均时间复杂度为O(1)。</p>
+<p>例题：两个数组的交集</p>
+<pre><code class="language-cpp">vector&lt;int&gt; intersection(vector&lt;int&gt;&amp; nums1, vector&lt;int&gt;&amp; nums2) {
+    unordered_set&lt;int&gt; set1(nums1.begin(), nums1.end());
+    unordered_set&lt;int&gt; resultSet;
+    for (int num : nums2) { // 按值复制遍历nums2!
+        if (set1.find(num) != set1.end()) { // 如果在set1中找到num
+            resultSet.insert(num);
+        }
+    }
+    return vector&lt;int&gt;(resultSet.begin(), resultSet.end());
+}</code></pre>
+<p>例题：两数之和</p>
+<pre><code class="language-cpp">vector&lt;int&gt; twoSum(vector&lt;int&gt;&amp; nums, int target) {
+    std::unordered_map&lt;int, int&gt; numMap; // 存储数值及其索引
+    for (int i = 0; i &lt; nums.size(); ++i) {
+        auto iter = numMap.find(target - nums[i]);
+        if (iter != numMap.end()) {
+            return {iter-&gt;second, i}; // 找到目标值，返回索引
+        }
+        numMap.insert(pair&lt;int, int&gt;(nums[i], i)); // 插入当前数值及其索引
+    }
+    return {}; // 未找到，返回空向量
+}
+
+例题：三数之和（使用双指针法）：注意去重使用continue跳过
+
+例题：四数之和--同样使用双指针法，外层两层循环固定前两个数，内层双指针寻找后两个数，注意去重。</code></pre>
+<pre><code class="language-cpp">    result.push_back(vector&lt;int&gt;{nums[i], nums[j], nums[left], nums[right]});</code></pre>
+<p>双指针用途：</p>
+<ol>
+<li>降低一个数量级的时间复杂度，例如从O(n^2)降到O(n)。</li>
+<li>使用双指针记录前后指针，反转链表。</li>
+<li>快慢指针寻找链表中点，判断链表是否有环等。</li>
+</ol>
+<h2 id="第6章-字符串">第6章 字符串</h2>
+<p>例题：反转字符串 有库函数std::reverse，也可以使用双指针法，从字符串两端向中间移动，交换字符。 reverse(s.begin(), s.end());</p>
+<p>例题：反转字符串中的单词 先整体反转字符串，然后逐个反转每个单词，最后去除多余空格。 如果使用s.erase()删除空格，注意erase会改变字符串长度，索引需要相应调整，会增加复杂度。 因而，建议使用双指针法构建新的字符串，避免频繁删除操作，配合resize函数调整字符串大小。</p>
+<pre><code class="language-cpp">s.resize(newLength);
+return s;</code></pre>
+<p>KMP算法： next数组表示的是前缀表的变形，用于记录模式串中每个位置之前的子串的最长相等前后缀的长度。 前缀表的任务是当前匹配失败时，告诉模式串应该跳到哪个位置继续匹配，从而避免重复比较已经匹配过的字符。 通过将对应的最长后缀等效替换为前缀，可以实现模式串的跳跃式移动，提高匹配效率。 KMP算法的时间复杂度为O(n+m)，其中n是文本串长度，m是模式串长度。空间复杂度为O(m)，用于存储next数组。</p>
+<p>无论是在计算next，还是在进行匹配的时候，j都从-1开始，表示当前没有匹配任何字符。</p>
+<pre><code class="language-cpp">void computeNext(const string&amp; pattern, vector&lt;int&gt;&amp; next) {
+    int m = pattern.size();
+    next.resize(m);
+    next[0] = -1; // 初始化第一个位置
+    int j = -1; // j表示当前匹配的前缀长度
+    for (int i = 1; i &lt; m; ++i) {
+        while (j &gt;= 0 &amp;&amp; pattern[i] != pattern[j + 1]) {
+            j = next[j]; // 回溯到上一个匹配位置
+        }
+        if (pattern[i] == pattern[j + 1]) {
+            ++j; // 匹配成功，前缀长度加1
+        }
+        next[i] = j; // 记录当前前缀长度
+    }
+}
+int KMP(const string&amp; text, const string&amp; pattern) {
+    int n = text.size();
+    int m = pattern.size();
+    if (m == 0) return 0; // 空模式串匹配成功，返回0
+    vector&lt;int&gt; next;
+    computeNext(pattern, next);
+    int j = -1; // j表示当前匹配的前缀长度
+    for (int i = 0; i &lt; n; ++i) {
+        while (j &gt;= 0 &amp;&amp; text[i] != pattern[j + 1]) {
+            j = next[j]; // 回溯到上一个匹配位置
+        }
+        if (text[i] == pattern[j + 1]) {
+            ++j; // 匹配成功，前缀长度加1
+        }
+        if (j == m - 1) {
+            return i - m + 1; // 找到匹配，返回起始索引
+        }
+    }
+    return -1; // 未找到匹配
+}</code></pre>
+<h2 id="第7章-栈与队列">第7章 栈与队列</h2>
+<p>HP STL是C++ STL的第一个实现版本，包含了基本的容器和算法实现。 P.J. Plauger是HP STL的主要设计者和实现者，他在1994年发布了《C++ Standard Template Library》一书，详细介绍了STL的设计理念和实现细节，但不是开源的。 SGI STL是由Silicon Graphics公司开发的STL实现版本，于1996年开源发布，成为C++ STL的一个重要实现，对后续的STL发展产生了深远影响。</p>
+<p>在SGL STL中，stack和queue都是适配器容器，默认情况下均使用deque作为底层容器。</p>
+<pre><code class="language-cpp">std::stack&lt;int&gt; myStack; // 默认使用deque作为底层容器
+std::stack&lt;int, std::vector&lt;int&gt;&gt; myStackVec; // 使用vector作为底层容器
+std::queue&lt;int&gt; myQueue; // 默认使用deque作为底层容器
+std::queue&lt;int, std::list&lt;int&gt;&gt; myQueueList; // 使用list作为底层容器</code></pre>
+<p>例题：用栈实现队列 我们可以用两个栈来实现队列的功能。一个栈用于入队操作，另一个栈用于出队操作。当需要出队时，如果出队栈为空，则将入队栈中的所有元素弹出并压入出队栈，然后从出队栈弹出元素。</p>
+<p>如果我们可以复用特定函数，则尽量不要将代码重复编写，避免冗余代码。</p>
+<p>例题：用队列实现栈 我们可以只使用一个队列来实现栈的功能。每次入栈时，将新元素加入队列，然后将队列中除新元素外的所有元素依次出队并重新入队，这样新元素就会位于队列的前端，实现了栈的后进先出特性。</p>
+<p>例题：使用deque实现滑动窗口最大值</p>
+<pre><code class="language-cpp">vector&lt;int&gt; maxSlidingWindow(vector&lt;int&gt;&amp; nums, int k) {
+    deque&lt;int&gt; dq; // 存储元素索引的双端队列
+    vector&lt;int&gt; result;
+    for (int i = 0; i &lt; nums.size(); ++i) {
+        // 移除不在窗口范围内的元素
+        if (!dq.empty() &amp;&amp; dq.front() == i - k) {
+            dq.pop_front();
+        }
+        // 移除所有小于当前元素的元素
+        while (!dq.empty() &amp;&amp; nums[dq.back()] &lt; nums[i]) {
+            dq.pop_back();
+        }
+        dq.push_back(i); // 将当前元素索引加入队列
+        // 当窗口大小达到k时，记录当前最大值
+        if (i &gt;= k - 1) {
+            result.push_back(nums[dq.front()]);
+        }
+    }
+    return result;
+}</code></pre>
+<p>例题：接雨水 第一种方法是使用双指针法，从中间向两端扩展，计算每个位置的积水量。 第二种方法是使用单调栈，遍历高度数组，维护一个单调递减的栈，当遇到比栈顶元素高的高度时，计算积水量，不需要储存pair。</p>
+<pre><code class="language-cpp">int trap(vector&lt;int&gt;&amp; height) {
+    int n = height.size();
+    if (n == 0) return 0;
+    stack&lt;int&gt; st;
+    int waterTrapped = 0;
+    for (int i = 0; i &lt; n; ++i) {
+        while (!st.empty() &amp;&amp; height[i] &gt; height[st.top()]) {
+            int top = st.top();
+            st.pop();
+            if (st.empty()) break;
+            int distance = i - st.top() - 1;
+            int boundedHeight = min(height[i], height[st.top()]) - height[top];
+            waterTrapped += distance * boundedHeight;
+        }
+        st.push(i);
+    }
+    return waterTrapped;
+}</code></pre>
+<p>总而言之，默认情况下，栈与队列使用deque作为底层容器，这意味着其在内存中的存储是不连续的。当然，因为栈和队列是适配器容器，我们也可以选择其他底层容器，如vector或list，根据具体需求进行优化。</p>
+<h2 id="第8章-二叉树">第8章 二叉树</h2>
+<p>定义：</p>
+<pre><code class="language-cpp">struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};</code></pre>
+<p>平衡二叉搜索树（AVL树）是一种自平衡的二叉搜索树，确保在每次插入或删除节点后，树的高度差不超过1，从而保持O(log n)的时间复杂度进行查找、插入和删除操作。</p>
+<p>二叉树的遍历方式： dfs包括前序、中序、后序遍历，通常使用递归实现，也可以使用栈实现非递归版本。</p>
+<ul>
+<li>前序遍历：访问根节点 -&gt; 遍历左子树 -&gt; 遍历右子树</li>
+<li>中序遍历：遍历左子树 -&gt; 访问根节点 -&gt; 遍历右子树</li>
+<li>后序遍历：遍历左子树 -&gt; 遍历右子树 -&gt; 访问根节点</li>
+<p>bfs即层序遍历，通常使用队列实现。</p>
+<li>层序遍历：按层次从上到下、从左到右访问节点</li>
+</ul>
+<p>使用递归遍历相对容易，只需要使用vector&lt;int&gt;&amp; result来存储结果。 而使用迭代遍历时，需要使用栈或队列以及指针来辅助存储节点，模拟递归过程。</p>
+<p>对于前序遍历，可以先将右子节点入栈，再将左子节点入栈，这样出栈时先访问左子节点，符合前序遍历顺序。</p>
+<p>对于中序遍历，如同递归一样，先访问左子节点，然后访问根节点，最后访问右子节点。可以使用一个指针不断向左遍历，将节点入栈，直到左子节点为空，然后弹出栈顶节点访问，再将指针指向右子节点，继续上述过程。</p>
+<pre><code class="language-cpp">vector&lt;int&gt; inorderTraversal(TreeNode* root) {
+    vector&lt;int&gt; result;
+    stack&lt;TreeNode*&gt; st;
+    TreeNode* current = root;
+    while (current != nullptr || !st.empty()) {
+        if (current != nullptr) {
+            st.push(current);
+            current = current-&gt;left;
+        } else {
+            current = st.top();
+            st.pop();
+            result.push_back(current-&gt;val);
+            current = current-&gt;right;
+        }
+    }
+    return result;
+}</code></pre>
+<p>对于后序遍历，同前序遍历类似，可以先将左子节点入栈，再将右子节点入栈，这样出栈时先访问右子节点，符合后序遍历顺序。最后将结果<strong>反转</strong>即可。</p>
+<p>如果我们想要将中序遍历同前序遍历与后序遍历一个模板，我们可以采用标记法，在中节点前插入一个空节点作为标记，表示该节点已经被访问过，下一次弹出时就可以访问该节点的值, 然后把这个值放到vector中。这样就可以统一处理三种遍历方式。</p>
+<pre><code class="language-cpp">vector&lt;int&gt; inorderTraversal(TreeNode* root) {
+    vector&lt;int&gt; result;
+    stack&lt;TreeNode*&gt; st;
+    if (root) st.push(root);
+    while (!st.empty()) {
+        TreeNode* node = st.top();
+        if (node) {
+            st.pop();
+            if (node-&gt;right) st.push(node-&gt;right);
+            st.push(node); // 将当前节点再次入栈作为标记
+            st.push(nullptr); // 标记当前节点已被访问
+            if (node-&gt;left) st.push(node-&gt;left);
+        } else {
+            st.pop(); // 弹出标记
+            node = st.top();
+            st.pop();
+            result.push_back(node-&gt;val); // 访问节点值
+        }
+    }
+    return result;
+}</code></pre>
+<p>例题：反转二叉树</p>
+<pre><code class="language-cpp">TreeNode* invertTree(TreeNode* root) {
+    if (!root) return nullptr;
+    swap(root-&gt;left, root-&gt;right);
+    invertTree(root-&gt;left);
+    invertTree(root-&gt;right);
+    return root;
+}</code></pre>
+<p>例题：对称二叉树 此题需要使用后序遍历，结合递归三部曲：确定递归函数的参数和返回值，确定终止条件，确定单层递归的逻辑。</p>
+<pre><code class="language-cpp">bool isMirror(TreeNode* t1, TreeNode* t2) {
+    if (!t1 &amp;&amp; !t2) return true;
+    if (!t1 || !t2) return false;
+    return (t1-&gt;val == t2-&gt;val) &amp;&amp;
+           isMirror(t1-&gt;left, t2-&gt;right) &amp;&amp;
+           isMirror(t1-&gt;right, t2-&gt;left);
+}
+
+例题：所有路径
+使用to_string函数将整数转换为字符串，构建路径字符串时注意添加&quot;-&gt;&quot;分隔符，最后将路径字符串加入结果向量中。</code></pre>
+<pre><code class="language-cpp">void dfs(TreeNode* node, vector&lt;int&gt;&amp; path, vector&lt;string&gt;&amp; result) {//注意参数传递方式，path需要引用传递，result也需要引用传递
+    if (!node) return;
+    path.push_back(node-&gt;val);
+    if (!node-&gt;left &amp;&amp; !node-&gt;right) {
+        // 到达叶子节点，构建路径字符串
+        string pathStr;
+        for (size_t i = 0; i &lt; path.size(); ++i) {
+            pathStr += to_string(path[i]);
+            if (i &lt; path.size() - 1) {
+                pathStr += &quot;-&gt;&quot;;
+            }
+        }
+        result.push_back(pathStr);
+    } else {
+        dfs(node-&gt;left, path, result);
+        dfs(node-&gt;right, path, result);
+    }
+    path.pop_back(); // 回溯
+}
+
+例题：中后序遍历构建二叉树
+思路：后序遍历是左右中顺序，中序遍历是左中右顺序，因此后序遍历的最后一个元素是树的根节点，在中序遍历中找到这个根节点的位置，就可以将中序遍历分为左子树和右子树两部分，然后递归构建左右子树。
+需要确定左闭右开的区间，且如果只有一个节点时，则说明子树只有一个节点，直接返回该节点即可。
+
+同理，如果是前序遍历和中序遍历构建二叉树，则前序遍历的第一个元素是树的根节点，在中序遍历中找到这个根节点的位置，就可以将中序遍历分为左子树和右子树两部分，然后递归构建左右子树。
+然而如果提供了前序遍历和后序遍历，则无法唯一确定一棵二叉树，因为前序遍历和后序遍历都无法确定左右子树的边界，因此无法唯一确定树的结构。</code></pre>
+<pre><code class="language-cpp">TreeNode* buildTree(vector&lt;int&gt;&amp; inorder, vector&lt;int&gt;&amp; postorder) {
+    if (inorder.empty() || postorder.empty()) return nullptr;
+    int rootVal = postorder.back();
+    TreeNode* root = new TreeNode(rootVal);
+    auto it = find(inorder.begin(), inorder.end(), rootVal);
+    int leftSize = distance(inorder.begin(), it);
+    vector&lt;int&gt; leftInorder(inorder.begin(), it);
+    vector&lt;int&gt; rightInorder(it + 1, inorder.end());
+    vector&lt;int&gt; leftPostorder(postorder.begin(), postorder.begin() + leftSize);
+    vector&lt;int&gt; rightPostorder(postorder.begin() + leftSize, postorder.end() - 1);
+    root-&gt;left = buildTree(leftInorder, leftPostorder);
+    root-&gt;right = buildTree(rightInorder, rightPostorder);
+    return root;
+}</code></pre>
+<p>例题：判断二叉搜索树 我们可以通过中序遍历二叉树，得到一个有序的序列，如果这个序列是严格递增的，那么说明这棵树是二叉搜索树。 如果我们使用迭代，为了避免<strong>最小值初始化</strong>的问题，我们可以从树的最左下儿子节点开始遍历，记录前一个访问的节点值，如果当前访问的节点值不大于前一个访问的节点值，则说明不是二叉搜索树。</p>
+<p>例题：二叉树的最近公共祖先 我们可以使用递归来解决这个问题。对于每个节点，我们检查它是否是p或q，如果是，则返回该节点。然后我们递归检查左子树和右子树，如果左子树和右子树都返回非空值，说明当前节点就是最近公共祖先。如果只有一个子树返回非空值，则说明最近公共祖先在那个子树中。</p>
+<pre><code class="language-cpp">TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+    if (!root || root == p || root == q) return root;
+    TreeNode* left = lowestCommonAncestor(root-&gt;left, p, q);
+    TreeNode* right = lowestCommonAncestor(root-&gt;right, p, q);
+    if (left &amp;&amp; right) return root; // p和q分别在左右子树中
+    return left ? left : right; // 否则在左子树或右子树中
+}</code></pre>
+<p>若为二叉搜索树，则可以利用其性质，比较当前节点值与p和q的值，来决定向左子树还是右子树递归，从而提高效率。</p>
+<p>例题：在二叉树中删除节点 删除节点时需要考虑三种情况：</p>
+<ol>
+<li>删除的节点是叶子节点，直接删除即可。</li>
+<li>删除的节点只有一个子节点，将该子节点替换删除节点的位置。</li>
+<li>删除的节点有两个子节点，找到该节点的左子树放在右子树的最左下儿子节点的左子树上，然后将右子树替换删除节点的位置。</li>
+</ol>
+<p>对于进阶版的修剪二叉树，要求删除所有不在范围 [low, high] 内的节点，原理类似，我们可以使用递归来实现，首先递归修剪左子树和右子树，然后根据当前节点的值与low和high的关系来决定是否删除当前节点以及如何连接修剪后的子树。</p>
+<p>总而言之，针对二叉树，我们需要考虑三种遍历方式各自的适用范围。 针对二叉树的构造，前序遍历可以保证先构造中间节点，或者通过递归函数的返回值来添加/删除节点。 求普通二叉树的属性，使用后序遍历，先求左右子树的属性，再根据左右子树的属性来求当前节点的属性。 对于二叉搜索树的属性，使用中序遍历，得到一个有序的序列，直接判断是否满足二叉搜索树的性质。</p>
+<p>递归三部曲：确定递归函数的参数和返回值，确定终止条件，确定单层递归的逻辑。</p>
+<h2 id="第9章-回溯算法">第9章 回溯算法</h2>
+<p>回溯三部曲：确定回溯函数的返回值和参数，确定回溯函数的终止条件，确定回溯搜索的遍历过程</p>
+<pre><code class="language-cpp">void backtrack(参数列表) {
+    if (终止条件) {
+        // 处理结果
+        return;
+    }
+    for (选择 : 选择列表) {
+        // 做选择
+        backtrack(参数列表);
+        // 撤销选择
+    }
+}</code></pre>
+<p>例题：组合总和（可重复） 思路：排序+简易剪枝 如果有重复元素，但每一个元素只能用一次，则需要考虑跳过重复元素，在记录visited数组时，只有当当前元素与前一个元素相同且前一个元素未被访问过时，才跳过当前元素。</p>
+<pre><code class="language-cpp">void backtrack(vector&lt;int&gt;&amp; candidates, int target, vector&lt;int&gt;&amp; path, vector&lt;vector&lt;int&gt;&gt;&amp; result, int start) {
+    if (target == 0) {
+        result.push_back(path);
+        return;
+    }
+    for (int i = start; i &lt; candidates.size(); ++i) {
+        if (candidates[i] &gt; target) break; // 简易剪枝
+        path.push_back(candidates[i]);
+        backtrack(candidates, target - candidates[i], path, result, i); // 可重复使用当前元素，传入i
+        path.pop_back();
+    }
+}
+
+例题：全排列
+针对全排列的去重有两种方式，一种是树层剪枝，另一种是树枝剪枝。
+树层剪枝：在同一层中，如果当前元素与前一个元素相同且前一个元素未被访问过，则跳过当前元素。
+树枝剪枝：在递归过程中，如果当前元素与前一个元素相同且前一个元素已经被访问过，则跳过当前元素。这保证了在同一树枝上不会重复使用相同的元素，从而避免生成重复的排列。等同于一种反向去重方式。
+</code></pre>
+<h2 id="第10章-贪心算法">第10章 贪心算法</h2>
+<p>使用局部最优推断全局最优的算法设计方法。 要证明一半需要使用反证法或者数学归纳法，但一般不做要求。</p>
+<p>例题：买卖股票的最佳时机 观察到多天的收益可以分解为每天的收益之和，因此只需要累加每天的正收益即可。</p>
+<pre><code class="language-cpp">int maxProfit(vector&lt;int&gt;&amp; prices) {
+    int maxProfit = 0;
+    for (size_t i = 1; i &lt; prices.size(); ++i) {
+        if (prices[i] &gt; prices[i - 1]) {
+            maxProfit += prices[i] - prices[i - 1];
+        }
+    }
+    return maxProfit;
+}</code></pre>
+<p>例题：跳楼梯 每个台阶都有一个对应的跳跃能力，表示从该台阶可以跳跃的最大距离。我们需要用最少的跳跃次数从第一个台阶跳到最后一个台阶。 注意：只要有一个台阶能够跳到终点，就不需要考虑后续的台阶了。 有个细节上的小优化，我们只需遍历到终点的前一个台阶，若之前的台阶的终点超过了这个台阶，步数就不需要增加了；反之，步数一定要增加1。</p>
+<pre><code class="language-cpp">int jump(vector&lt;int&gt;&amp; nums) {
+    int jumps = 0;
+    int currentEnd = 0; // 当前跳跃的终点
+    int farthest = 0; // 当前跳跃能够到达的最远位置
+    for (size_t i = 0; i &lt; nums.size() - 1; ++i) {
+        farthest = max(farthest, i + nums[i]);
+        if (i == currentEnd) { // 到达当前跳跃的终点
+            jumps++;
+            currentEnd = farthest; // 更新当前跳跃的终点
+        }
+    }
+    return jumps;
+}</code></pre>
+<p>例题：合并区间 首先对区间按照起始位置进行排序，然后遍历排序后的区间列表，如果当前区间的起始位置小于等于上一个合并区间的结束位置，说明两个区间有重叠，可以合并；否则，说明当前区间与上一个合并区间没有重叠，可以将上一个合并区间加入结果列表，并更新当前合并区间为当前区间。<strong>最后别忘了将最后一个合并区间加入结果列表。</strong></p>
+<h2 id="第11章-动态规划">第11章 动态规划</h2>
+<p>动态规划问题可以分为五部曲：</p>
+<ol>
+<li>定义状态：确定dp数组的含义，dp[i]表示什么。</li>
+<li>确定状态转移方程：根据问题的要求，找到dp[i]与之前状态之间的关系。</li>
+<li>确定初始状态：根据状态转移方程，确定dp数组的初始值。</li>
+<li>确定计算顺序：根据状态转移方程，确定dp数组的计算顺序，通常是从小到大或者从大到小。</li>
+<li>举例推导dp数组：通过具体的例子，推导dp数组的值，验证状态转移方程的正确性。</li>
+</ol>
+<p>例题：整数拆分 因为整数拆分问题需要至少拆分成两个正整数，所以我们需要考虑dp数组的定义，dp[i]表示将整数i拆分成至少两个正整数的最大乘积。 所以我们需要将dp数组同两个表达式进行比较，分别为dp[i]和**j * (i - j)**，以及j * dp[i - j]，其中j表示拆分的第一个整数，i - j表示剩余的整数。我们需要在这两者中取最大值，来更新dp[i]的值。</p>
+<p>例题：零钱兑换 是一个完全背包问题，但要注意先遍历物品，再遍历背包容量，这样才能保证每个物品可以被重复使用。 否则会出现1+5和5+1两种情况，导致结果重复。</p>
+<p>例题：单词拆分 我们可以使用一个布尔类型的dp数组，dp[i]表示字符串s的前i个字符是否可以被空格拆分成一个或多个在字典中出现的单词。初始状态dp[0]为true，表示空字符串可以被拆分。对于每个位置i，我们需要检查之前的位置j，如果dp[j]为true，并且s[j:i]在字典中出现过，那么我们就可以将dp[i]更新为true。</p>
+<pre><code class="language-cpp">bool wordBreak(string s, vector&lt;string&gt;&amp; wordDict) {
+    unordered_set&lt;string&gt; wordSet(wordDict.begin(), wordDict.end());
+    vector&lt;bool&gt; dp(s.size() + 1, false);
+    dp[0] = true; // 空字符串可以被拆分
+    for (size_t i = 1; i &lt;= s.size(); ++i) {
+        for (size_t j = 0; j &lt; i; ++j) {
+            // substr(j, i - j)表示从位置j开始，长度为i-j的子字符串，即s[j:i]，也可以用find函数来判断s[j:i]是否在字典中出现过 - wordSet.find(s.substr(j, i - j)) != wordSet.end()
+            if (dp[j] &amp;&amp; wordSet.count(s.substr(j, i - j))) {
+                dp[i] = true;
+                break; // 找到一个有效的拆分，跳出内层循环
+            }
+        }
+    }
+    return dp[s.size()];
+}</code></pre>
+<p>例题：不相交的线段 给定两个长度相同的数组A和B，数组中的元素分别表示在数轴上的点。我们需要连接A中的点和B中的点，要求连接的线段不相交，求最多可以连接多少条线段。 思路：我们可以将问题转化为求最长公共子序列（LCS）的问题。</p>
+<p>例题：两个字符串的删除操作 给定两个字符串word1和word2，我们需要通过删除字符的方式使得两个字符串相等，求最少需要删除多少个字符。 思路：我们可以将问题转化为求最长公共子序列（LCS）的问题。最长公共子序列的长度表示两个字符串中最长的公共子序列的长度，那么我们需要删除的字符数就是两个字符串的长度之和减去最长公共子序列的长度的两倍。 如果从朴素的dp数组出发，我们可以定义dp[i][j]表示word1的前i个字符和word2的前j个字符的使得能够使字符串相同的最少删除操作数。状态转移方程如下： 若word1[i-1] == word2[j-1]，则dp[i][j] = dp[i-1][j-1]，表示当前字符相同，不需要删除。 若word1[i-1] != word2[j-1]，则dp[i][j] = min(dp[i-1][j], dp[i][j-1]) + 1，表示需要删除一个字符，选择删除word1的字符还是删除word2的字符。</p>
+<p>例题：编辑距离 编辑距离是指将一个字符串转换成另一个字符串所需要的最少操作数，可以使用删除，增加或替换字符的办法，需要注意增加字符可以看作另一个字符串删除字符的反向操作，因此状态转移方程如下： 若word1[i-1] == word2[j-1]，则dp[i][j] = dp[i-1][j-1]，表示当前字符相同，不需要操作。 若word1[i-1] != word2[j-1]，则dp[i][j] = min({dp[i-1][j] + 1, dp[i][j-1] + 1, dp[i-1][j-1] + 1})，表示需要进行操作，选择删除word1的字符，增加word2的字符，还是替换字符。</p>
+<p>例题：回文子串数 我们可以开一个bool数组dp[i][j]，表示字符串s的子串s[i:j]是否是回文串。初始状态是所有长度为1的子串都是回文串，即dp[i][i] = true。对于长度大于1的子串，如果s[i] == s[j]，并且dp[i+1][j-1]为true，那么dp[i][j]也为true。我们需要遍历所有的子串，统计dp数组中为true的个数，即为回文子串的数量。注意遍历顺序需要从短到长，这样才能保证在计算dp[i][j]时，dp[i+1][j-1]已经被计算过了。 同样，我们还可以使用<strong>双指针法</strong>来解决这个问题。对于每个中心点，我们可以向两边扩展，统计回文子串的数量。中心点可以是一个字符，也可以是两个字符之间的位置，这样可以覆盖所有长度为奇数和偶数的回文子串。</p>
+<p>关于图论之前的内容就到此结束啦，后续的内容会继续讲解图论相关的算法和数据结构。</p>
+<h2 id="第1章-图的基本概念">第1章 图的基本概念</h2>
+<p>连通图相对于无向图来说，指的是图中任意两个顶点之间都存在路径的图。对于有向图来说，强连通图指的是图中任意两个顶点之间都存在路径的图，而弱连通图指的是将有向图中的所有边视为无向边后得到的无向图是连通的。</p>
+<h2 id="第2章-DFS和BFS">第2章 DFS和BFS</h2>
+<p>图的存储一般分为邻接矩阵和邻接表两种方式。邻接矩阵适合稠密图，空间复杂度为O(n^2)，而邻接表适合稀疏图，空间复杂度为O(n + m)，其中n是顶点数，m是边数。 使用DFS最后输出结果时，我们可以采用C++的新特性，直接使用范围for循环来输出路线结果：</p>
+<pre><code class="language-cpp">for (const vector&lt;int&gt; &amp;path : result) {
+    for (int vertex : path) {
+        cout &lt;&lt; vertex &lt;&lt; &quot; &quot;;
+    }
+    cout &lt;&lt; endl;
+}</code></pre>
+<p>BFS可以使用任意容器，但通常使用队列来实现。</p>
+<p>例题：字符串迁移 本题需要求出从字符串start到字符串end的最短迁移路径，要求每次迁移只能改变一个字符，并且迁移后的字符串必须在字典中出现过。 思路：我们可以将每个字符串看作图中的一个节点，如果两个字符串之间只有一个字符不同，那么它们之间就有一条边。我们需要使用BFS来寻找从start到end的最短路径。 使用BFS能保证我们找到的路径是最短的，因为BFS是逐层扩展的，先访问距离起点较近的节点，再访问距离较远的节点。同时可以使用双向BFS来优化搜索效率，从start和end同时开始搜索，直到两边的搜索相遇，这样可以大大减少搜索的节点数量，提高效率。</p>
+<h2 id="第3章-并查集">第3章 并查集</h2>
+<p>使用路径压缩和按秩合并可以优化并查集的性能，使得每次操作的时间复杂度接近O(1)。路径压缩是在find操作中，将访问过的节点直接连接到根节点上，减少树的高度；按秩合并是在union操作中，将较小的树连接到较大的树上，保持树的平衡。</p>
+<p>需要注意的是在join的时候，一定要通过find函数找到根节点来进行合并，而不是直接将一个节点连接到另一个节点上，否则会导致连通性可能出现问题。 一个具体的例子就是join(1,2),join(3,2)。</p>
+<p>另一种合并方式是按秩合并，按秩合并是根据树的高度来进行合并的，将较矮的树连接到较高的树上，这样可以保持树的平衡，避免出现过高的树导致性能下降。</p>
+<p>例题：寻找存在的路径 给定一个n个节点的图和一个边列表edges，判断是否存在一条路径连接节点source和destination。 思路：我们可以使用并查集来解决这个问题。首先初始化一个并查集，将每个节点看作一个独立的集合。然后遍历边列表，将连接的节点进行合并。最后检查source和destination是否在同一个集合中，如果是，则说明存在路径连接它们。</p>
+<p><strong>例题</strong>：并查集寻找有向边 给定一个边数等于点数的有向图，找出删除哪条边可以使得图变成一个树。 思路：可以将情况分为三种：</p>
+<ol>
+<li>入度为2的节点不存在：图中有环，需要删除环中的任意一条边。</li>
+<li>入度为2的节点存在且环存在：需要删除入度为2的节点的其中一条边，具体删除哪条边需要根据环的情况来判断。</li>
+<li>入度为2的节点存在但环不存在：需要删除入度为2的节点的其中一条边，具体删除哪条边需要根据输入的边列表来判断，通常是删除最后出现的那条边</li>
+<p>依然根据拓扑排序来判断图内是否存在环。</p>
+</ol>
+<h2 id="第4章-最小生成树">第4章 最小生成树</h2>
+<p>有两种常用的算法来求解最小生成树：Prim算法和Kruskal算法。 Prim算法是从一个起始节点开始，逐步扩展生成树，每次选择与生成树相连的边中权重最小的边加入生成树（开一个专门的minDist数组，时间复杂度为O(V^2)），直到所有节点都被包含在生成树中。Prim算法适合稠密图，时间复杂度为O(E log V)，其中E是边数，V是顶点数。由于每个节点都会在最小生成树中，所以起始点的选择不会影响最终的结果。如果要记录边的选择，可以用map来记录每个节点的父节点，变为有向边的形式，最后根据父节点关系来输出边的选择。 Kruskal算法是将所有边按照权重从小到大排序，然后逐步选择边加入生成树，每次选择权重最小的边，如果加入该边不会形成环，则将其加入生成树，直到生成树包含所有节点。Kruskal算法适合稀疏图，时间复杂度为O(E log E)，其中E是边数。Kruskal算法需要使用并查集来判断加入的边是否会形成环。</p>
+<h2 id="第5章-最短路径算法">第5章 最短路径算法</h2>
+<p>有两种常用的算法来求解最短路径：Dijkstra算法和Bellman-Ford算法。 Dijkstra算法适用于边权非负的图，原理也是贪心，同Prim算法类似，每次选择当前距离起点最近的节点进行扩展，更新其邻居节点的距离，直到所有节点都被访问过。时间复杂度为O(E log V)，其中E是边数，V是顶点数。 Bellman-Ford算法适用于边权可以为负的图，原理是动态规划，通过不断松弛边来更新最短路径，重复V-1次，其中V是顶点数。时间复杂度为O(V * E)，其中V是顶点数，E是边数。每一次松弛操作后，Bellman-Ford算法能找到起点到与起点相连n条边的最短路径，但不意味着是当前节点到起点的最短路径。Bellman-Ford算法还可以检测负权环，如果在第V次松弛时仍然能够更新距离，说明存在负权环。每一次松弛操作，我们可以使用一个队列存储更新了的节点，只有当一个节点的距离被更新且当前不在队列中时，才将其加入队列，这样可以避免不必要的松弛操作，提高效率，这个优化版本被称为SPFA算法。若是疏松图，SPFA的复杂度会接近O(E)，但在最坏情况下，SPFA的复杂度仍然是O(V * E)。</p>
+<p>想要用Bellman-Ford寻找负权环，我们可以在第V次松弛时，检查是否还有边能够被松弛，如果有，则说明存在负权环。我们可以使用一个布尔数组来标记哪些节点在第V次松弛时被更新了，如果有任何一个节点被更新了，那么就说明存在负权环。我们也可以等价为入队大于等于V次的节点说明存在负权环。注意需要一个额外的数组记录节点是不是在队列中，避免重复入队。</p>
+<p>SPFA没有所谓的一轮的概念，因为它是基于队列的，每次更新一个节点就会立即检查它的邻居节点是否需要更新，并将需要更新的邻居节点加入队列中。因此，SPFA的迭代过程是动态的，不像Bellman-Ford算法那样有明确的轮次划分。</p>
+<p>例题：有限制的最短路径 给定一个有向图，图中每条边都有一个权重，求从起点到终点的最短路径长度，要求路径上最多只能经过k条边。 注意使用bellman ford的时候松弛k次时，每一次松弛对应的minDist对应的是上一次松弛的结果，因此需要使用一个临时数组来存储当前松弛的结果，避免在同一轮松弛中更新了minDist后又被后续的边松弛所影响。 如果使用SPFA算法，则针对每一轮我们需要记录新弹入的节点数，作为下一轮的起始节点数，直到达到k轮或者没有新的节点被弹入为止。</p>
+<p>多源最短路径问题就要用Floyd-Warshall算法了，时间复杂度为O(V^3)，其中V是顶点数。Floyd-Warshall算法通过动态规划的方式，逐步更新最短路径矩阵，最终得到任意两点之间的最短路径长度。不能将k放在中间层的原因是因为Floyd-Warshall算法的核心思想是通过逐步引入中间节点来更新最短路径，如果将k放在中间层，那么就无法正确地更新最短路径矩阵，因为k的限制会影响到路径的选择，导致无法得到正确的最短路径长度。 dp[i][j][k]表示的是当中间节点仅为{1,...,k}的时候，节点i到节点j的最短路径长度。对于每一轮k，我们需要遍历所有的节点对(i, j)，更新dp[i][j][k]的值，比较不经过节点k的路径长度dp[i][j][k-1]和经过节点k的路径长度dp[i][k][k-1] + dp[k][j][k-1]，取两者中的较小值作为dp[i][j][k]的值。最终我们需要返回dp[source][destination][V]，其中V是图中节点的总数。</p>
+<p>同样我们可以压缩空间，将dp数组压缩为二维数组，dp[i][j]表示当前中间节点集合为{1,...,k}时，节点i到节点j的最短路径长度。每一轮k，我们需要遍历所有的节点对(i, j)，更新dp[i][j]的值，比较不经过节点k的路径长度dp[i][j]和经过节点k的路径长度dp[i][k] + dp[k][j]，取两者中的较小值作为dp[i][j]的新值。最终我们需要返回dp[source][destination]。</p>
+<p>同时作为启发式算法的A*算法也可以用来求解最短路径问题，A*算法在Dijkstra算法的基础上引入了启发式函数，能够更快地找到目标节点。A*算法的时间复杂度取决于启发式函数的质量，最坏情况下可能退化为O(E log V)，其中E是边数，V是顶点数。A*算法的核心思想是通过启发式函数来估计从当前节点到目标节点的距离，从而优先探索更有可能接近目标节点的路径。启发式函数需要满足一致性条件，即对于任意两个节点u和v，启发式函数h(u)应该满足h(u) &lt;= h(v) + w(u, v)，其中w(u, v)是从节点u到节点v的边权重。这样可以保证A*算法能够找到最短路径，以保证可能的最优情况都会被涉及到。我们可以用曼哈顿距离/欧几里得距离等启发式函数来估计节点之间的距离，具体选择哪种启发式函数取决于问题的特点和实际需求。需要注意的是，使用A*算法时边权重必须是非负的，否则可能会导致算法无法正确地找到最短路径。</p>
+        </div>
+      </article>
+      <footer class="footer">
+        <span>? 2026 Yan Liang</span>
+        <a href="index.html">Back to blogs</a>
+      </footer>
+    </main>
+  </body>
+</html>
