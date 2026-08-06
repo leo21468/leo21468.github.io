@@ -92,11 +92,9 @@
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        numMap<span class="op">.</span>insert<span class="op">(</span>pair<span class="op">&lt;</span><span class="dt">int</span><span class="op">,</span> <span class="dt">int</span><span class="op">&gt;(</span>nums<span class="op">[</span>i<span class="op">],</span> i<span class="op">));</span> <span class="co">// 插入当前数值及其索引</span></span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">{};</span> <span class="co">// 未找到，返回空向量</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>例题：三数之和（使用双指针法）：注意去重使用continue跳过</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>例题：四数之和<span class="op">--</span>同样使用双指针法，外层两层循环固定前两个数，内层双指针寻找后两个数，注意去重。</span></code></pre></div>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>例题：三数之和（使用双指针法）：注意去重使用continue跳过</p>
+<p>例题：四数之和--同样使用双指针法，外层两层循环固定前两个数，内层双指针寻找后两个数，注意去重。</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>    result<span class="op">.</span>push_back<span class="op">(</span>vector<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;{</span>nums<span class="op">[</span>i<span class="op">],</span> nums<span class="op">[</span>j<span class="op">],</span> nums<span class="op">[</span>left<span class="op">],</span> nums<span class="op">[</span>right<span class="op">]});</span></span></code></pre></div>
 <p>双指针用途：</p>
 <ol type="1">
@@ -271,10 +269,8 @@
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">(</span>t1<span class="op">-&gt;</span>val <span class="op">==</span> t2<span class="op">-&gt;</span>val<span class="op">)</span> <span class="op">&amp;&amp;</span></span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>           isMirror<span class="op">(</span>t1<span class="op">-&gt;</span>left<span class="op">,</span> t2<span class="op">-&gt;</span>right<span class="op">)</span> <span class="op">&amp;&amp;</span></span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>           isMirror<span class="op">(</span>t1<span class="op">-&gt;</span>right<span class="op">,</span> t2<span class="op">-&gt;</span>left<span class="op">);</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>例题：所有路径</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>使用to_string函数将整数转换为字符串，构建路径字符串时注意添加<span class="st">&quot;-&gt;&quot;</span>分隔符，最后将路径字符串加入结果向量中。</span></code></pre></div>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>例题：所有路径 使用to_string函数将整数转换为字符串，构建路径字符串时注意添加"-&gt;"分隔符，最后将路径字符串加入结果向量中。</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> dfs<span class="op">(</span>TreeNode<span class="op">*</span> node<span class="op">,</span> vector<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;&amp;</span> path<span class="op">,</span> vector<span class="op">&lt;</span>string<span class="op">&gt;&amp;</span> result<span class="op">)</span> <span class="op">{</span><span class="co">//注意参数传递方式，path需要引用传递，result也需要引用传递</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(!</span>node<span class="op">)</span> <span class="cf">return</span><span class="op">;</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    path<span class="op">.</span>push_back<span class="op">(</span>node<span class="op">-&gt;</span>val<span class="op">);</span></span>
@@ -293,14 +289,9 @@
 <span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>        dfs<span class="op">(</span>node<span class="op">-&gt;</span>right<span class="op">,</span> path<span class="op">,</span> result<span class="op">);</span></span>
 <span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
 <span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    path<span class="op">.</span>pop_back<span class="op">();</span> <span class="co">// 回溯</span></span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>例题：中后序遍历构建二叉树</span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>思路：后序遍历是左右中顺序，中序遍历是左中右顺序，因此后序遍历的最后一个元素是树的根节点，在中序遍历中找到这个根节点的位置，就可以将中序遍历分为左子树和右子树两部分，然后递归构建左右子树。</span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>需要确定左闭右开的区间，且如果只有一个节点时，则说明子树只有一个节点，直接返回该节点即可。</span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>同理，如果是前序遍历和中序遍历构建二叉树，则前序遍历的第一个元素是树的根节点，在中序遍历中找到这个根节点的位置，就可以将中序遍历分为左子树和右子树两部分，然后递归构建左右子树。</span>
-<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>然而如果提供了前序遍历和后序遍历，则无法唯一确定一棵二叉树，因为前序遍历和后序遍历都无法确定左右子树的边界，因此无法唯一确定树的结构。</span></code></pre></div>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>例题：中后序遍历构建二叉树 思路：后序遍历是左右中顺序，中序遍历是左中右顺序，因此后序遍历的最后一个元素是树的根节点，在中序遍历中找到这个根节点的位置，就可以将中序遍历分为左子树和右子树两部分，然后递归构建左右子树。 需要确定左闭右开的区间，且如果只有一个节点时，则说明子树只有一个节点，直接返回该节点即可。</p>
+<p>同理，如果是前序遍历和中序遍历构建二叉树，则前序遍历的第一个元素是树的根节点，在中序遍历中找到这个根节点的位置，就可以将中序遍历分为左子树和右子树两部分，然后递归构建左右子树。 然而如果提供了前序遍历和后序遍历，则无法唯一确定一棵二叉树，因为前序遍历和后序遍历都无法确定左右子树的边界，因此无法唯一确定树的结构。</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>TreeNode<span class="op">*</span> buildTree<span class="op">(</span>vector<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;&amp;</span> inorder<span class="op">,</span> vector<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;&amp;</span> postorder<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>inorder<span class="op">.</span>empty<span class="op">()</span> <span class="op">||</span> postorder<span class="op">.</span>empty<span class="op">())</span> <span class="cf">return</span> <span class="kw">nullptr</span><span class="op">;</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> rootVal <span class="op">=</span> postorder<span class="op">.</span>back<span class="op">();</span></span>
@@ -316,14 +307,9 @@
 <span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> root<span class="op">;</span></span>
 <span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <p>例题：判断二叉搜索树 我们可以通过中序遍历二叉树，得到一个有序的序列，如果这个序列是严格递增的，那么说明这棵树是二叉搜索树。 如果我们使用迭代，为了避免<strong>最小值初始化</strong>的问题，我们可以从树的最左下儿子节点开始遍历，记录前一个访问的节点值，如果当前访问的节点值不大于前一个访问的节点值，则说明不是二叉搜索树。</p>
-<p>例题：二叉树的最近公共祖先 我们可以使用递归来解决这个问题。对于每个节点，我们检查它是否是p或q，如果是，则返回该节点。然后我们递归检查左子树和右子树，如果左子树和右子树都返回非空值，说明当前节点就是最近公共祖先。如果只有一个子树返回非空值，则说明最近公共祖先在那个子树中。</p>
-<pre class="cppTreeNode*"><code>    if (!root || root == p || root == q) return root;
-    TreeNode* left = lowestCommonAncestor(root-&gt;left, p, q);
-    TreeNode* right = lowestCommonAncestor(root-&gt;right, p, q);
-    if (left &amp;&amp; right) return root; // p和q分别在左右子树中
-    return left ? left : right; // 否则在左子树或右子树中
-}</code></pre>
-<p>若为二叉搜索树，则可以利用其性质，比较当前节点值与p和q的值，来决定向左子树还是右子树递归，从而提高效率。</p>
+<p>例题：二叉树的最近公共祖先 我们可以使用递归来解决这个问题。对于每个节点，我们检查它是否是p或q，如果是，则返回该节点。然后我们递归检查左子树和右子树，如果左子树和右子树都返回非空值，说明当前节点就是最近公共祖先。如果只有一个子树返回非空值，则说明最近公共祖先在那个子树中。 `cpp TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) { if (!root || root == p || root == q) return root; TreeNode* left = lowestCommonAncestor(root-&gt;left, p, q); TreeNode* right = lowestCommonAncestor(root-&gt;right, p, q); if (left &amp;&amp; right) return root; // p和q分别在左右子树中 return left ? left : right; // 否则在左子树或右子树中 }</p>
+<pre><code>若为二叉搜索树，则可以利用其性质，比较当前节点值与p和q的值，来决定向左子树还是右子树递归，从而提高效率。
+</code></pre>
 <p>例题：在二叉树中删除节点 删除节点时需要考虑三种情况：</p>
 <ol type="1">
 <li>删除的节点是叶子节点，直接删除即可。</li>
@@ -358,12 +344,8 @@
 <span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>        backtrack<span class="op">(</span>candidates<span class="op">,</span> target <span class="op">-</span> candidates<span class="op">[</span>i<span class="op">],</span> path<span class="op">,</span> result<span class="op">,</span> i<span class="op">);</span> <span class="co">// 可重复使用当前元素，传入i</span></span>
 <span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>        path<span class="op">.</span>pop_back<span class="op">();</span></span>
 <span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>例题：全排列</span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>针对全排列的去重有两种方式，一种是树层剪枝，另一种是树枝剪枝。</span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>树层剪枝：在同一层中，如果当前元素与前一个元素相同且前一个元素未被访问过，则跳过当前元素。</span>
-<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>树枝剪枝：在递归过程中，如果当前元素与前一个元素相同且前一个元素已经被访问过，则跳过当前元素。这保证了在同一树枝上不会重复使用相同的元素，从而避免生成重复的排列。等同于一种反向去重方式。</span></code></pre></div>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>例题：全排列 针对全排列的去重有两种方式，一种是树层剪枝，另一种是树枝剪枝。 树层剪枝：在同一层中，如果当前元素与前一个元素相同且前一个元素未被访问过，则跳过当前元素。 树枝剪枝：在递归过程中，如果当前元素与前一个元素相同且前一个元素已经被访问过，则跳过当前元素。这保证了在同一树枝上不会重复使用相同的元素，从而避免生成重复的排列。等同于一种反向去重方式。</p>
 <h2 id="basic-7">第10章 贪心算法</h2>
 <p>使用局部最优推断全局最优的算法设计方法。 要证明一半需要使用反证法或者数学归纳法，但一般不做要求。</p>
 <p>例题：买卖股票的最佳时机 观察到多天的收益可以分解为每天的收益之和，因此只需要累加每天的正收益即可。</p>
