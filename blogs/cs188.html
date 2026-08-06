@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="UCB CS188: Introduction to Artificial Intelligence - Yan Liang's study notes" />
+    <title>UCB CS188: Introduction to Artificial Intelligence | Yan Liang</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <main class="page blog-page">
+      <nav class="topbar" aria-label="Blog navigation">
+        <a href="../index.html">Home</a>
+        <a href="index.html">Blogs</a>
+      </nav>
+      <article class="article">
+        <header class="article-header">
+          <p class="article-meta">Study Notes &middot; UCB CS188 &middot; 2026-08-06</p>
+          <h1>UCB CS188: Introduction to Artificial Intelligence</h1>
+          <p class="article-subtitle">Search, games, logic, probability, and sequential decision-making.</p>
+        </header>
+        <div class="article-shell">
+          <aside class="toc" aria-label="Table of contents">
+            <p class="toc-title">Contents</p>
+<ul>
+<li><a href="#introduction-to-artificial-intelligence" id="toc-introduction-to-artificial-intelligence">Introduction to Artificial Intelligence</a>
+<ul>
+<li><a href="#search-algorithms" id="toc-search-algorithms">Search Algorithms</a></li>
+<li><a href="#games" id="toc-games">Games</a></li>
+<li><a href="#logic" id="toc-logic">Logic</a></li>
+<li><a href="#possibility" id="toc-possibility">Possibility</a></li>
+</ul></li>
+</ul>
+          </aside>
+          <div class="article-body">
+<h1 id="introduction-to-artificial-intelligence">Introduction to Artificial Intelligence</h1>
+<h2 id="search-algorithms">Search Algorithms</h2>
+<h3 id="uninformed-search">Uninformed Search</h3>
+<p>For DFS, the fringe space complexity is O(bm) and the time complexity is O(b^m), where b is the branching factor and m is the maximum depth of the search tree. For BFS, the fringe space complexity is O(b^d) and the time complexity is also O(b^d), where d is the depth of the shallowest solution.</p>
+<p>This is because for the stack DFS uses, it needs to store the nodes along the search path while keeping the other nodes in memory. In contrast, BFS uses a queue that stores all the nodes at the current depth level before moving on to the next level, leading to higher space requirements.</p>
+<p>The only scenario where DFS is more efficient than BFS is when the search tree is very deep and solutions are located far from the root, making BFS impractical due to its high memory consumption.</p>
+<p>There is another approach called uniform-cost search, which expands the least-cost node first. Its time and space complexity is O(b^(C*/e)), where C* is the cost of the optimal solution and e is the minimum step cost. This method is more efficient when path costs vary. The measure is also called Dijkstra's algorithm.</p>
+<p>We can also use iterative deepening search, which combines the benefits of DFS and BFS. It performs a series of depth-limited searches with increasing depth limits. Its time complexity is O(b^d) and space complexity is O(bd), making it more memory efficient than BFS while still being complete like BFS.</p>
+<h3 id="informed-search">Informed Search</h3>
+<p>We can combine heruistics and greedy search to create the A* search algorithm. A* uses both the cost to reach a node and an estimated cost to reach the goal from that node. The evaluation function is defined as f(n) = g(n) + h(n), where g(n) is the cost to reach node n and h(n) is the heuristic estimate of the cost from n to the goal. The heruistic function can be euclidean distance or manhattan distance or so on.</p>
+<p>We should only stop searching when we dequeue a goal node. A* is both complete and optimal if the heuristic function h(n) is admissible, meaning it <strong>never</strong> overestimates the true cost to reach the goal. It means that the heuristic is optimistic, heruistic value is always less than or equal to the actual cost from node n to the goal. As we can ensure that f(n) on the optimal path is always less than or equal to the final result cost, so A* will find the optimal solution.</p>
+<p>We can also use IDA* (Iterative Deepening A*), which combines the benefits of A* and iterative deepening search. It performs a series of depth-first searches with increasing cost limits based on the f(n) values. This approach is more memory efficient than A* while still being optimal and complete, provided the heuristic is admissible.</p>
+<p>So heruistics is an art of designing good estimates for the cost to reach the goal. A well-designed heuristic can significantly improve the efficiency of search algorithms like A* and IDA*. The best heruistic is the real cost while the worst heruistic is always zero.</p>
+<p>Note that the model isn't equal to reality.</p>
+<h3 id="local-search">Local Search</h3>
+<p>Hill climbing is a local search algorithm that continuously moves towards the direction of increasing value (or decreasing cost) until it reaches a peak (or valley). It can get stuck in local maxima or minima, so techniques like random restarts or simulated annealing can be used to escape these local optima.</p>
+<p>Random restarts/sideways moves involve restarting the search from different random initial states or allowing sideways moves to explore the search space more thoroughly, making situaions with the same value to be explored.</p>
+<p>Simulated annealing is inspired by the annealing process in metallurgy. It allows occasional uphill moves (moves to higher cost states) to escape local minima, with the probability of such moves decreasing over time (controlled by a temperature parameter). This helps the algorithm explore the search space more effectively. If the new state is better, we always move to it. If it's worse, we move to it with a probability of exp((currentCost - newCost) / temperature). As temperature decreases, the probability of accepting worse states decreases.</p>
+<p>Beam search is a variant of breadth-first search that explores a fixed number of the best nodes at all the nodes expanded at each level. It keeps track of the k best nodes (the beam width) and discards the rest, which helps to limit memory usage while still exploring multiple paths in the search space. It's like evolutionary algorithms where only the fittest individuals survive to the next generation.</p>
+<p>In all, general families of search algorithms include:</p>
+<ul>
+<li>Uninformed Search: DFS, BFS, Uniform-Cost Search, Iterative Deepening Search</li>
+<li>Informed Search: A*, IDA*</li>
+<li>Local Search: Hill Climbing, continuous optimization, Simulated Annealing (and other stochastic methods), Local Beam Search, Genetic Algorithms</li>
+</ul>
+<h2 id="games">Games</h2>
+<h3 id="minimax-algorithm-zero-sum-games-alpha-beta-pruning">Minimax Algorithm, zero-sum games, alpha-beta pruning</h3>
+<p>Game = task environnment with &gt;1 agent + adversarial</p>
+<p>Minimax algorithm is a decision-making algorithm used in two-player zero-sum games. It assumes that both players play optimally and aims to minimize the possible loss for a worst-case scenario. The algorithm explores the game tree by recursively evaluating the possible moves and their outcomes, ultimately selecting the move that maximizes the player's minimum gain. We know the leaves of the game tree and then the corresponding values can be obtained by backpropagation.</p>
+<p>Tic-tac-toe is an example of a simple game where the minimax algorithm can be applied. The game tree for tic-tac-toe is relatively small, allowing for complete exploration of all possible moves and outcomes. Then we can determine the optimal strategy for both players using the minimax algorithm.</p>
+<p>As the time complexity is large, we can cut some branches(prune) using boundary conditions. The method is called alpha-beta pruning. Alpha represents the minimum score that the maximizing player is assured of, while beta represents the maximum score that the minimizing player is assured of. If at any point during the search, it is found that the current node's value is worse than the previously explored nodes, the search can be pruned, as it won't affect the final decision.</p>
+<p>As in realistic games, cannot search to leaves, we can use evaluation functions to estimate the value of non-terminal nodes. These functions analyze the game state and provide a score that reflects the likelihood of winning from that position. Common evaluation functions consider factors such as material advantage, positional advantage, and control of key areas on the board.</p>
+<p>Note that replanning agents may result in endless loops. So when we use limited depth search, we should design good evaluation functions and proper search depths to avoid bad moves.</p>
+<h3 id="expectimax-non-zero-sum-games-stochastic-games">Expectimax, non-zero-sum games, stochastic games</h3>
+<p>Expectimax is an extension of the minimax algorithm used in games that involve chance elements, such as dice rolls or card draws. In expectimax, the algorithm considers not only the optimal moves of the players but also the expected outcomes of chance events. The game tree is expanded to include chance nodes, where the expected value of the outcomes is calculated based on their probabilities. If there is a chance of minimax node and random, we use expectimax where we can simulate the expected value of the random node using minimax plus probability weights.</p>
+<p>Monte Carlo Tree Search (MCTS) is a popular algorithm for decision-making in games, particularly in non-zero-sum games. MCTS builds a search tree incrementally by performing random simulations of the game from the current state. It consists of four main steps: selection, expansion, simulation, and backpropagation. MCTS balances exploration and exploitation to find the most promising moves. MCTS Ver1: allocate rollouts to the more promising moves; allocate rollouts to more uncertain moves.</p>
+<p>UCB1: Upper Confidence Bound for Trees, a method to balance exploration and exploitation in MCTS. UCB1(n) = \frac{win(n)}{visits(n)} + c * sqrt(ln(visits(parent(n))) / visits(n)) where c is a constant that determines the level of exploration.</p>
+<p>MCTS Ver2: use UCB1 to select child nodes during the selection phase, ensuring a balance between exploring new moves and exploiting known successful moves.</p>
+<h2 id="logic">Logic</h2>
+<h3 id="propositional-logic-first-order-logic">Propositional Logic, First-Order Logic</h3>
+<p>A proof is a demonstration of entailment. Entailment: KB |= α if in every model where KB is true, α is also true.</p>
+<p>Sound if every sentence it derives is entailed by the KB. Complete if it can derive every sentence that is entailed by the KB.</p>
+<p>Semantics: meaning of sentences. Syntax: structure of sentences.</p>
+<p>"\alpha =&gt; \beta" is true in m iff either \alpha is false in m or \beta is true in m.</p>
+<p>There are only 4 types of inference rules in propositional logic:</p>
+<ol type="1">
+<li>Modus Ponens: From "P" and "P =&gt; Q", infer "Q".</li>
+<li>And-Elimination: From "P and Q", infer "P" (or "Q").</li>
+<li>Or-Introduction: From "P", infer "P or Q" (or "Q or P").</li>
+<li>Resolution: From "P or Q" and "not P or R", infer "Q or R".</li>
+</ol>
+<p>Proportional logic has limited expressiveness. First-order logic (FOL) extends propositional logic by introducing quantifiers, predicates, and functions, allowing for more complex statements about objects and their relationships.</p>
+<p>One possible agent architecture is to combine knowledge and inference.</p>
+<p>Forward chaining is sound and complete for propositional logic. It is efficient when there are many facts and few rules, as it derives new facts from existing ones until the goal is reached.</p>
+<p>Backward chaining is also sound and complete for propositional logic. It is efficient when there are many rules and few facts, as it starts from the goal and works backward to find supporting facts.</p>
+<p>A sentence is satisfiable if there exists at least one model where the sentence is true. An unsatisfiable sentence is one that is false in all models.</p>
+<p>For the first-order logic, this is initially used to show that when we have a knowledge base KB and a query α, we can convert the problem of checking whether KB |= α into checking whether KB and not α is unsatisfiable. The condition where the query is false is like ()-&gt;(), which doesn't conclude anything. So we can use resolution to check whether KB and not α is unsatisfiable, which is equivalent to checking whether KB |= α.</p>
+<p>The component of a first-order logic sentence includes:</p>
+<ul>
+<li>Constants: represent specific objects in the domain (e.g., "Alice", "Bob").</li>
+<li>Variables: represent arbitrary objects in the domain (e.g., "x", "y").</li>
+<li>Predicates: represent properties of objects or relationships between objects (e.g., "Loves(Alice, Bob)").</li>
+<li>Functions: represent mappings from objects to other objects (e.g., "FatherOf(Alice)").</li>
+<li>Quantifiers: express statements about the quantity of objects (e.g., "For all x, P(x)" or "There exists x such that P(x)").</li>
+<li>Composition: sentences can be composed using logical connectives (and, or, not, implies) to form more complex statements.</li>
+</ul>
+<p>Godel's incompleteness theorems state that in any consistent formal system that is capable of expressing basic arithmetic, there are true statements that cannot be proven within the system. This implies that there are limitations to what can be achieved with formal logic and that there will always be some truths that are beyond our ability to prove. We can think of it as the equivalance of "This sentence is false." and "This sentence cannot be proven true.".</p>
+<p>These theories can be used in Prolog, a logic programming language that allows us to express facts and rules about a domain and query the knowledge base to infer new information. Prolog uses a form of backward chaining to answer queries based on the facts and rules defined in the knowledge base. The basic idea lays solid foundations for logic programming and automated reasoning, enabling us to build intelligent systems that can reason about complex domains.</p>
+<p>PDDL (Planning Domain Definition Language) is a language used for describing planning problems in artificial intelligence. It provides a standardized way to define the initial state, goal state, and actions available in a planning problem. PDDL allows us to specify the conditions under which actions can be executed and the effects of those actions on the state of the world. This enables us to use automated planning algorithms to find sequences of actions that achieve a desired goal from a given initial state. PDDL is widely used in AI research and applications for tasks such as robotics, logistics, and game playing, where planning and decision-making are crucial components. This is just like the function claimation, requires, modifies and effects in programming languages, which can be used to specify the behavior of functions and their interactions with the state of the program.</p>
+<h2 id="possibility">Possibility</h2>
+<h3 id="introduction">Introduction</h3>
+<p>By combining probability theory and utility theory, we can create a framework for decision-making under uncertainty. This allows us to model and reason about situations where outcomes are not deterministic, and to make informed choices based on the likelihood of different outcomes and their associated utilities.</p>
+<h3 id="random-variables-probability-distributions">Random Variables, Probability Distributions</h3>
+<p>A random variable is a variable that can take on different values based on the outcome of a random event. It can be discrete (taking on specific values) or continuous (taking on any value within a range). Probability distributions describe how the probabilities are distributed over the possible values of a random variable.</p>
+<p>There may exist hidden variables that doesn't appear in the data but can affect the observed variables. These hidden variables can introduce confounding effects, making it difficult to accurately model the relationships between observed variables. For those that doesn't have any influence, we just sum them up in the calculation. However, for those that do have an influence, we must account for them in our models. To address this, we can use techniques such as latent variable models or causal inference methods to account for the influence of hidden variables and improve our understanding of the underlying processes.</p>
+<p>Bayes Theorem is important in that when we know the probability of a condition given the data, we can calculate the probability of the data given the condition. This is particularly useful in situations where we have prior knowledge about the condition and want to update our beliefs based on new evidence. P(A|B) = P(B|A) * P(A) / P(B)</p>
+<p>Conditional independence is a key concept in probability theory that allows us to simplify complex probability calculations. Two events A and B are conditionally independent given a third event C if the occurrence of A does not affect the probability of B occurring, and vice versa, when we know that C has occurred. This can be expressed mathematically as: P(A, B | C) = P(A | C) * P(B | C)</p>
+<h3 id="bayesian-networks-limited-nodes">Bayesian Networks (limited nodes)</h3>
+<ul>
+<li>Naive Bayes: assumes all features are independent given the class label. It is simple and efficient, but may not capture complex relationships between features.</li>
+</ul>
+<h3 id="sampling-methods">Sampling Methods</h3>
+<ul>
+<li>Prior sampling: generates samples from the prior distribution sequentially, which can be inefficient if the evidence is unlikely.</li>
+<li>Rejection sampling: generates samples from the prior distribution and rejects those that do not match the evidence, which can be inefficient if the evidence is rare, the error should be proportial to 1/sqrt(N) where N is the number of samples.</li>
+<li>Likelihood weighting: generates samples from the prior distribution and weights them according to how well they match the evidence, which can be more efficient than rejection sampling, however, upstream nodes may have very small weights, which can lead to high variance in the estimates.</li>
+<li>Gibbs sampling: a Markov Chain Monte Carlo method that iteratively samples each variable conditioned on the current values of the other variables, which can be more efficient than likelihood weighting, but may require careful tuning of the sampling process to ensure convergence. Based on Markov blanket, we can sample each variable given its Markov blanket, which includes its parents, children, and co-parents. This allows us to efficiently sample from the joint distribution of the variables in the Bayesian network.</li>
+</ul>
+<h3 id="markov-decision-processes">Markov Decision Processes</h3>
+<p>The transition model P(xt|xt-1) specifies how the state evolves over time. Stationaity assumption: transition probabilities do not change over time. Markov assumption: the future state depends only on the current state, not on the sequence of events that preceded it. k-th order Markov assumption: the future state depends on the current state and the previous k states.</p>
+<h3 id="hidden-markov-models">Hidden Markov Models</h3>
+<p>For each state, there is an associated observation that provides information about the state. The observation model P(ot|xt) specifies the probability of observing ot given that the system is in state xt.</p>
+<p>There are four main inference tasks in HMMs:</p>
+<ol type="1">
+<li>Filtering: Given a sequence of observations, determine the probability distribution over the current state.</li>
+<li>Prediction: Given a sequence of observations, determine the probability distribution over a future state.</li>
+<li>Smoothing: Given a sequence of observations, determine the probability distribution over a past state.</li>
+<li>Most likely explanation: Given a sequence of observations, determine the most likely sequence of states that could have generated those observations.</li>
+</ol>
+<p>Filtering algorithm (Forward algorithm) is used to compute the probability distribution over the current state given a sequence of observations. It works by recursively updating the probability distribution based on the previous distribution and the new observation. P(xt|o1:t) = P(ot|xt) * sum(P(xt|xt-1) * P(xt-1|o1:t-1))</p>
+          </div>
+        </div>
+      </article>
+      <footer class="footer">
+        <span>&copy; 2026 Yan Liang</span>
+        <a href="index.html">Back to blogs</a>
+      </footer>
+    </main>
+  </body>
+</html>

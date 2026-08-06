@@ -358,6 +358,23 @@ h2::before {
   color: var(--blue-dark);
 }
 
+.toc nav {
+  width: 100%;
+}
+
+.toc ul {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.toc ul ul {
+  margin-top: 2px;
+  padding-left: 12px;
+}
+
 .article-body {
   min-width: 0;
 }
@@ -493,6 +510,10 @@ h2::before {
   }
 
   .toc-title {
+    grid-column: 1 / -1;
+  }
+
+  .toc nav {
     grid-column: 1 / -1;
   }
 }
