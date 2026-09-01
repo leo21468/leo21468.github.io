@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Yan Liang is a Computer Engineering student and game developer building gameplay systems, progression loops, and interactive prototypes."
+    />
+    <title>Yan Liang | Game Portfolio</title>
+    <style>
+      :root { --ink: #ecedf6; --muted: #a8aec7; --navy: #111528; --card: #1b2040; --violet: #9b87f5; --pink: #ff93ba; --line: rgba(255,255,255,.14); }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body { margin: 0; color: var(--ink); background: radial-gradient(circle at 82% 0%, #38245c 0, transparent 30rem), radial-gradient(circle at 0 28rem, #15374b 0, transparent 28rem), var(--navy); font: 16px/1.6 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      a { color: inherit; }
+      .shell { width: min(1120px, calc(100% - 44px)); margin: auto; }
+      .nav { display: flex; justify-content: space-between; align-items: center; padding: 26px 0; border-bottom: 1px solid var(--line); }
+      .wordmark { color: var(--ink); font-size: 1.4rem; font-weight: 850; letter-spacing: -.06em; text-decoration: none; } .wordmark span { color: var(--pink); }
+      .nav div { display: flex; align-items: center; gap: 20px; } .nav div a { color: var(--muted); font-size: .92rem; font-weight: 700; text-decoration: none; } .nav .nav-resume { padding: 7px 13px; color: var(--ink); border: 1px solid var(--line); border-radius: 999px; }
+      .hero { display: grid; grid-template-columns: 1.45fr .72fr; gap: 54px; align-items: center; padding: 104px 0 88px; }
+      .eyebrow { margin: 0 0 14px; color: var(--pink); font-size: .75rem; font-weight: 800; letter-spacing: .13em; }
+      h1, h2, h3, p { margin-top: 0; } h1 { margin-bottom: 22px; font-size: clamp(3rem, 7vw, 5.9rem); line-height: .98; letter-spacing: -.065em; } h1 span { display: block; color: var(--violet); }
+      .hero-lede { max-width: 42rem; margin-bottom: 32px; color: var(--muted); font-size: 1.16rem; }
+      .actions, .contact-actions { display: flex; flex-wrap: wrap; gap: 12px; } .button { display: inline-flex; align-items: center; justify-content: center; min-height: 45px; padding: 0 17px; border: 1px solid var(--line); border-radius: 8px; font-weight: 800; text-decoration: none; } .primary { color: #151528; background: linear-gradient(112deg, var(--pink), #edc0f3); border: 0; } .secondary:hover, .nav .nav-resume:hover { background: rgba(255,255,255,.08); }
+      .hero-panel { padding: 26px; background: linear-gradient(145deg, rgba(255,255,255,.12), rgba(255,255,255,.025)); border: 1px solid var(--line); border-radius: 18px; box-shadow: 18px 20px 0 rgba(0,0,0,.13); } .panel-label { margin-bottom: 8px; color: var(--violet); font-size: .72rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; } .hero-panel ul { display: grid; gap: 7px; margin: 0; padding: 0; list-style: none; font-weight: 720; } .hero-panel li::before { margin-right: 9px; color: var(--pink); content: "✦"; } .panel-note { margin: 24px 0 0; padding-top: 17px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+      .section { padding: 76px 0; border-top: 1px solid var(--line); } .heading { max-width: 42rem; margin-bottom: 35px; } h2 { margin-bottom: 10px; font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.04; letter-spacing: -.047em; } .heading > p:last-child { color: var(--muted); }
+      .projects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 17px; } .card { overflow: hidden; background: rgba(255,255,255,.055); border: 1px solid var(--line); border-radius: 16px; } .art { height: 195px; background: #27204d; overflow: hidden; } .art img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s ease; } .card:hover .art img { transform: scale(1.05); } .currency-art { display: flex; height: 195px; align-items: center; justify-content: center; gap: 25px; color: #ffd1df; background: linear-gradient(135deg, #6e326f, #1b254e); font-size: 3.2rem; } .currency-art span:nth-child(2) { color: #ffe883; transform: translateY(-24px); } .currency-art span:nth-child(3) { color: #9ff5ef; transform: translateY(18px); }
+      .card-body { padding: 22px; } .meta { margin-bottom: 8px; color: var(--violet); font-size: .71rem; font-weight: 800; letter-spacing: .075em; text-transform: uppercase; } h3 { margin-bottom: 9px; font-size: 1.55rem; letter-spacing: -.035em; } .card-body > p:not(.meta) { min-height: 126px; color: var(--muted); font-size: .94rem; } .tags { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 22px; padding: 0; list-style: none; } .tags li { padding: 4px 8px; border: 1px solid var(--line); border-radius: 99px; color: #d7d9eb; font-size: .73rem; font-weight: 750; } .project-link { color: #fff; font-size: .9rem; font-weight: 800; text-decoration-color: var(--pink); text-underline-offset: 4px; }
+      .about { display: grid; grid-template-columns: 1.1fr 1fr; gap: 65px; align-items: start; } .about > p { margin: 0; color: #d8dae8; font-size: 1.13rem; } .skills { display: grid; gap: 23px; } .skills > div { padding-bottom: 19px; border-bottom: 1px solid var(--line); } .skills p:last-child { margin-bottom: 0; color: var(--muted); }
+      .contact { display: flex; justify-content: space-between; gap: 30px; align-items: center; padding: 57px 0; border-top: 1px solid var(--line); } .contact h2 { margin-bottom: 0; }
+      footer { display: flex; justify-content: space-between; padding: 24px 0 38px; color: var(--muted); border-top: 1px solid var(--line); font-size: .9rem; } footer a { text-decoration: none; }
+      @media (max-width: 780px) { .shell { width: min(100% - 28px, 1120px); } .hero, .about { grid-template-columns: 1fr; } .hero { gap: 32px; padding: 70px 0 62px; } .projects { grid-template-columns: 1fr; } .card-body > p:not(.meta) { min-height: 0; } .contact { display: grid; } }
+      @media (max-width: 450px) { .nav div { gap: 13px; } .nav div a:not(.nav-resume) { display: none; } h1 { font-size: 3.15rem; } }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <nav class="nav" aria-label="Primary navigation">
+        <a class="wordmark" href="#top">YL<span>.</span></a>
+        <div><a href="#work">Work</a><a href="#about">About</a><a class="nav-resume" href="Game_CV.pdf">Resume</a></div>
+      </nav>
+
+      <header class="hero" id="top">
+        <div>
+          <p class="eyebrow">GAME DEVELOPER · COMPUTER ENGINEERING</p>
+          <h1>Yan Liang<span>/ 梁彦</span></h1>
+          <p class="hero-lede">I build playable systems around rhythm, strategy, progression, and player feedback. I enjoy taking an idea from a fast prototype to a coherent game loop.</p>
+          <div class="actions"><a class="button primary" href="#work">View selected work</a><a class="button secondary" href="Game_CV.pdf">Download game CV</a></div>
+        </div>
+        <aside class="hero-panel" aria-label="Portfolio highlights">
+          <p class="panel-label">Currently bringing</p>
+          <ul><li>Gameplay systems</li><li>Rapid prototyping</li><li>Player progression</li><li>Interactive UI</li></ul>
+          <p class="panel-note">Open to collaboration in game development.</p>
+        </aside>
+      </header>
+
+      <section class="section" id="work">
+        <div class="heading"><p class="eyebrow">SELECTED WORK</p><h2>Games built with teams</h2><p>Playable prototypes made through iterative design, implementation, and collaboration.</p></div>
+        <div class="projects">
+          <article class="card">
+            <div class="art"><img src="https://focs.gc.sjtu.edu.cn/silverfocs/demo/2025/p2team10/doc/thumbnail.jpg" alt="Neko Band game thumbnail" /></div>
+            <div class="card-body"><p class="meta">SJTU SilverFOCS · Team Project · 2025</p><h3>Neko Band</h3><p>A band-management prototype that connects rhythm practice, card-based combat, map events, and character upgrades into one progression loop.</p><ul class="tags"><li>Rhythm</li><li>Card Combat</li><li>Progression</li></ul><a class="project-link" href="https://focs.gc.sjtu.edu.cn/silverfocs/project/2025/p2">View project ↗</a></div>
+          </article>
+          <article class="card">
+            <div class="art"><img src="https://focs.gc.sjtu.edu.cn/silverfocs/demo/2025/p1team10/doc/thumbnail.jpg" alt="Fur-get Me Not game thumbnail" /></div>
+            <div class="card-body"><p class="meta">SJTU SilverFOCS · Team Project · 2025</p><h3>Fur-get Me Not</h3><p>A three-stage magical-cat adventure blending paddle and rhythm interactions, role abilities, escalating challenges, and dice-based modifiers.</p><ul class="tags"><li>Action</li><li>Narrative</li><li>Game Feel</li></ul><a class="project-link" href="https://focs.gc.sjtu.edu.cn/silverfocs/project/2025/p1">View project ↗</a></div>
+          </article>
+          <article class="card">
+            <div class="currency-art" aria-hidden="true"><span>♪</span><span>↗</span><span>◆</span><span>♪</span></div>
+            <div class="card-body"><p class="meta">SJTU Campus Game Jam · Team Project</p><h3>Currency War</h3><p>A Unity/Tuanjie 2D strategy and rhythm prototype: recruit band members, manage equipment and formations, then fight through four-lane rhythm battles.</p><ul class="tags"><li>Unity/Tuanjie</li><li>C#</li><li>UGUI</li></ul><a class="project-link" href="https://github.com/leo21468/CurrencyWar">View GitHub ↗</a></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="about">
+        <div class="heading"><p class="eyebrow">ABOUT</p><h2>Systems-minded, player-focused</h2></div>
+        <div class="about"><p>I am a dual-degree student in Electrical and Computer Engineering at Shanghai Jiao Tong University and Computer Engineering at the University of Michigan. I like building games where the rules, interface, and feedback work together to create satisfying player decisions.</p><div class="skills"><div><p class="panel-label">Tools</p><p>C#, C++, Python, Unity/Tuanjie, UGUI, Git, SolidWorks</p></div><div><p class="panel-label">Interests</p><p>Gameplay programming, interactive UI, progression systems, rapid prototyping, 3D modeling</p></div></div></div>
+      </section>
+
+      <section class="contact" id="contact"><div><p class="eyebrow">LET'S MAKE SOMETHING</p><h2>Interested in working together?</h2></div><div class="contact-actions"><a class="button primary" href="mailto:leoly@umich.edu">Email me</a><a class="button secondary" href="https://github.com/leo21468">GitHub</a></div></section>
+      <footer><span>© 2026 Yan Liang</span><a href="blogs/index.html">Blog</a></footer>
+    </main>
+  </body>
+</html>
